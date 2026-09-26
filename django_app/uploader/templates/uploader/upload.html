@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload de Arquivos</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 640px; margin: 40px auto; padding: 0 16px; }
+        form { margin-bottom: 24px; padding: 16px; border: 1px solid #ccc; border-radius: 8px; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 6px; }
+        .msg { padding: 8px; background: #e6ffe6; border: 1px solid #9c9; border-radius: 4px; margin-bottom: 16px; }
+    </style>
+</head>
+<body>
+    <h1>Upload de Arquivos</h1>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="msg">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Enviar</button>
+    </form>
+
+    <h2>Arquivos enviados</h2>
+    <ul>
+        {% for arquivo in arquivos %}
+            <li>
+                <a href="{{ arquivo.file.url }}" target="_blank">{{ arquivo.file.name }}</a>
+                {% if arquivo.description %} - {{ arquivo.description }}{% endif %}
+                ({{ arquivo.uploaded_at }})
+            </li>
+        {% empty %}
+            <li>Nenhum arquivo enviado ainda.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
